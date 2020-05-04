@@ -1,0 +1,6 @@
+# my.cnf
+[client]
+database = staffer-live
+user = django
+password = DJango123
+default-character-set = utf8

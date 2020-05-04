@@ -1,0 +1,20 @@
+{% if user.is_authenticated %}
+<form id="logoutForm" action="/logout" method="post" class="navbar-right">
+    {% csrf_token %}
+    <ul class="nav navbar-nav navbar-right">
+        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
+        <button class="btn btn-secondary" href="javascript:document.getElementByID(;logoutForm').submit()">Sign out</button>
+    </ul>
+</form>
+
+{% else %}
+
+<form id="loginButton" action="#loginModal" method="post" class="navbar-right">
+    {% csrf_token %}
+    <ul class="nav navbar-nav navbar-right">
+        <button class="btn btn-secondary" href=".">Sign in</button>
+    </ul>
+    
+</form>
+
+{% endif %}
