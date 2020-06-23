@@ -1,0 +1,55 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-3">Staffer</h1>
+        <p class="lead">Staffer is an online rota system that automatically allocates shifts to your workers. Less work, more pay!</p>
+        {% if user.is_authenticated %}
+        <a href="/dashboard" class="btn btn-primary btn-large">
+            <span data-feather="chevrons-right"></span>
+            Go to dashboard
+        </a>
+        {% else %}
+        <a href="/about" class="btn btn-primary btn-large">Learn more &raquo;</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-4 col-home-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Getting started</h2>
+                <img class="img-responsive" src="/app/static/app/assets/undraw_done_a34v.svg" />
+                <p>
+                    Staffer makes sure that you can work in comfort, knowing that your employees know when its time for work.
+                </p>
+                <p><a class="btn btn-default" href="/about">Learn more &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 col-home-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Connected</h2>
+                <img class="img-responsive" src="/app/static/app/assets/undraw_connected_world_wuay.svg" />
+                <p>We live in a connected world, so why don't you keep your employees connected with their work?</p>
+                <p><a class="btn btn-default" href="https://pypi.org/">Learn more &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 col-home-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Security</h2>
+                <img class="img-responsive" src="/app/static/app/assets/undraw_safe_bnk7.svg" />
+                <p>Know that your employees' data is safe - all of it is on your servers!</p>
+                <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

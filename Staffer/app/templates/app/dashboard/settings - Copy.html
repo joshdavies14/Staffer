@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Settings - Staffer</title>
+    {% load staticfiles %}
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    {#<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />#}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/dashboard.css' %}" />
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-o">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Staffer</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" />
+        <ul class="navbar-nav px-3">
+            <form id="logoutForm" action="/accounts/logout/" method="post" class="navbar-right">
+                    {% csrf_token %}
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link" href="/accounts/logout/">Sign out</a>
+                    </li>
+                </form>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">
+                                <span data-feather="home"></span>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/calendar">
+                                <span data-feather="calendar"></span>
+                                Calendar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/settings">
+                                <span data-feather="users"></span>
+                                User Settings <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <span data-feather="arrow-left-circle"></span>
+                                Back to homepage
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Settings</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        {% if request.user.is_superuser %}
+                        <div class="btn-group mr-2">
+                            <a href="/dashboard/admin/" class="btn btn-info">Admin</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                 </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissable text-center" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}{{ message.tags|title }}{% endif %}!</strong> {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                  
+                  <div class="col-sm-9">
+                       <h5>Shift Preferences</h5>
+                        
+                        <div class="col-sm-4">
+                            <form name="shiftPrefForm" action="/submit/shiftpref/" method="post">
+                                {% csrf_token %}
+                                <p class="card-text" style="display:inline-block">Monday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline1" name="radioDay1" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline1">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline2" name="radioDay1" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline2">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline3" name="radioDay1" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline3">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline4" name="radioDay1" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline4">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day1}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Tuesday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline5" name="radioDay2" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline5">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline6" name="radioDay2" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline6">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline7" name="radioDay2" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline7">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline8" name="radioDay2" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline8">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day2}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Wednesday</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline9" name="radioDay3" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline9">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline10" name="radioDay3" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline10">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline11" name="radioDay3" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline11">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline12" name="radioDay3" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline12">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day3}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Thursday &nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline13" name="radioDay4" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline13">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline14" name="radioDay4" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline14">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline15" name="radioDay4" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline15">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline16" name="radioDay4" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline16">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day4}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Friday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline17" name="radioDay5" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline17">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline18" name="radioDay5" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline18">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline19" name="radioDay5" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline19">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline20" name="radioDay5" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline20">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day5}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Saturday &nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline21" name="radioDay6" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline21">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline22" name="radioDay6" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline22">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline23" name="radioDay6" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline23">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline24" name="radioDay6" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline24">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day6}} </p>
+                                <br />
+                                <p class="card-text" style="display:inline-block">Sunday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline25" name="radioDay7" class="custom-control-input" value="0" checked>
+                                  <label class="custom-control-label" for="customRadioInline25">None</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline26" name="radioDay7" class="custom-control-input" value="1">
+                                  <label class="custom-control-label" for="customRadioInline26">AM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline27" name="radioDay7" class="custom-control-input" value="2">
+                                  <label class="custom-control-label" for="customRadioInline27">PM</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                  <input type="radio" id="customRadioInline28" name="radioDay7" class="custom-control-input" value="3">
+                                  <label class="custom-control-label" for="customRadioInline28">All Day</label>
+                                </div>
+                                <p class="card-text" style="display:inline-block"> Currently: {{day7}} </p>
+                                <br />
+                                <input class="btn btn-primary" type="submit" value="Submit">
+                            </form>
+                        </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Changing preferences</h5>
+                            <p>Enter the number on the scale that best matches your preference: <br />
+                            0: I don't want to work on this day <br />
+                            1-4: I want to work AM (1 - would prefer not to, 4 - would love to) <br />
+                            5-8: I want to work PM (1 - would prefer not to, 8 - would love to) <br />
+                            9: I want to work all day </p>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Change password</h5>
+                        <form method="post" name="passwordchange">
+                            {% csrf_token %}
+                            
+                            <input class="form-control form-control-dark w-100" type="password" placeholder="Password" aria-label="Password" />
+                            <a href="/password" class="btn btn-primary">Submit</a>
+                        </form>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br />
+            </main>
+        </div>
+        
+    </div>
+
+    
+
+
+
+
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

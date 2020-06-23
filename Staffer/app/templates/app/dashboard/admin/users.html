@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Users - Staffer</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    {#<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />#}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/dashboard.css' %}" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-light sticky-top bg-light flex-md-nowrap p-o">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/dashboard/admin/">Staffer Admin</a>
+        <h6 class="text-left">Logged in as: {{ user.first_name }} {{ user.last_name }} &nbsp;</h6>
+        <ul class="navbar-nav px-3">
+            <form id="logoutForm" action="/accounts/logout/" method="post" class="navbar-right">
+                    {% csrf_token %}
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link" href="/accounts/logout/">Sign out</a>
+                    </li>
+                </form>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/admin">
+                                <span data-feather="home"></span>
+                                Home <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/admin/shifts">
+                                <span data-feather="calendar"></span>
+                                View Shifts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/admin/shifts/add">
+                                <span data-feather="edit-3"></span>
+                                Add Shift Templates
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/admin/users">
+                                <span data-feather="users"></span>
+                                Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Users</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group mr-2">
+                            <a href="/dashboard/" class="btn btn-info">Return to dashboard</a>
+                        </div>
+                    </div>
+                 </div>
+
+                <div class="modal fade" id="addReputationModal" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="addReputationModalTitle">Add reputation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form name="changeRepForm" action="/submit/reputation/" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="user-pick">Pick user:</label>
+                                <select class="form-control" name="userpick">
+                                  {% for item in query_results %}
+                                  <option>{{item.0}} {{item.1}}</option>
+                                  {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="10" name="rep1ontime">
+                                  <label class="form-check-label" for="rep1ontime">
+                                    On time - +10
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="5" name="rep2uniform">
+                                  <label class="form-check-label" for="rep2uniform">
+                                    Correct uniform - +5
+                                  </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rep3additional" class="inline">Additional points:</label>
+                                <input class="form-control col-sm-3" type="number" min="0" value="0" name="rep3additional" />
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card">
+                      <div class="card-body">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                            <h5 class="card-title">All Users</h5>
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group mr-2">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addReputationModal">Add reputation</button>
+                                    <a href="/dashboard/admin/users/new" class="btn btn-success">Create</a>
+                                </div>
+                            </div>
+                         </div>
+                          <table class="table">
+                            <thread class="thread-dark">
+                                <tr>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Surname</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Last login</th>
+                                    <th scope="col">Admin?</th>
+                                </tr>
+                            </thread>
+                            <tbody>
+                                {% for item in query_results %}
+                                <tr>
+                                    <td>{{item.0}}</td>
+                                    <td>{{item.1}}</td>
+                                    <td>{{item.2}}</td>
+                                    <td>{{item.3}}</td>
+                                    <td>{{item.4}}</td>
+                                    <td>{{item.5}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <br />
+               
+                
+                
+            </main>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Staffer</title>
+    {% load staticfiles %}
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="{% static 'app/scripts/feather.js' %}"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-default navbar-dark bg-primary fixed-top">
+        <a class="navbar-brand" href="/">Staffer</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {#<li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+                {% endif %}#}
+            </ul>
+            <div class="navbar-nav navbar-right">
+                {% if user.is_authenticated %}
+                <form id="logoutForm" action="/accounts/logout/" method="post" class="form-inline my-2 my-lg-0">
+                    {% csrf_token %}
+                        <li><span class="navbar-brand">Hello {{ user.first_name }}!</span></li>
+                        <button class="btn btn-secondary my-2 my-sm-0" href="javascript:document.getElementByID(;logoutForm').submit()">
+                            <span data-feather="log-out"></span>
+                            Sign out
+                        </button>
+                </form>
+
+                {% else %}
+
+                {#<button class="btn btn-secondary my-2 my-sm-0" data-toggle="modal" data-target="#modallog">Login</button>#}
+
+                <!-- Modal HTML -->
+                    <div id="modallog" class="modal">
+                        <div class="modal-dialog modal-login">
+                            <div class="modal-content">
+                                {% if form.errors %}
+                                <div class="alert alert-danger" role="alert">Your username and password didn't match. Please try again.</div>
+                                {% endif %}
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Login</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/accounts/login/go/" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label>Username</label>
+                                            <input name="username" type="text" class="form-control" required="required">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="clearfix">
+                                                <label>Password</label>
+                                                <a href="#" class="pull-right text-muted"><small>Forgot?</small></a>
+                                            </div>
+                                            <input name="password" type="password" class="form-control" required="required">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <label class="checkbox-inline pull-left"><input type="checkbox"> Remember me</label>
+                                            <input type="submit" class="btn btn-primary pull-right" value="Login">
+                                            <input type="hidden" name="next" value="/dashboard/" />
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                    </div>
+
+                    {% endif %}
+
+            {#<form class="form-inline my-2 my-lg-0" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>#}
+    </nav>
+
+    <div class="container-fluid">
+        {% block content %}{% endblock %}
+        
+    </div>
+    <div class="container-fluid fixed-bottom">
+        <hr />
+        <footer>
+            <p>&copy; 2019 - Staffer | <a href="/privacy">Privacy Policy</a></p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    {% block scripts %}{% endblock %}
+
+    
+</body>
+</html>
+

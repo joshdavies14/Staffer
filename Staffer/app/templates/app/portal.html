@@ -1,0 +1,13 @@
+﻿<!--user logged in, brought to portal-->
+
+{% extends "app/layout.html" %}
+
+<div class="jumbotron">
+    <h1>Welcome, {{ user.username}}</h1>
+</div>
+
+<div class="col-md-3">
+    <div class="alert alert-primary">
+        Your next shift is:
+    </div>
+</div>

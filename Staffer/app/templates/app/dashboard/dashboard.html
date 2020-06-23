@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Dashboard - Staffer</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.css' %}" />
+    {#<link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />#}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/dashboard.css' %}" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+      $( "#datepicker" ).datepicker();
+    } );
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-o">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/dashboard/">Staffer</a>
+        <h6 class="text-left text-white">Logged in as: {{ user.first_name }} {{ user.last_name }} &nbsp;</h6>
+        {#<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" />#}
+        <ul class="navbar-nav px-3">
+            <form id="logoutForm" action="/accounts/logout/" method="post" class="navbar-right">
+                    {% csrf_token %}
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link" href="/accounts/logout/">Sign out</a>
+                    </li>
+                </form>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">
+                                <span data-feather="home"></span>
+                                Dashboard <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/calendar">
+                                <span data-feather="calendar"></span>
+                                Calendar
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard/settings">
+                                <span data-feather="users"></span>
+                                User Settings
+                            </a>
+                        </li>
+                        <br />
+                        
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        {% if request.user.is_superuser %}
+                        <div class="btn-group mr-2">
+                            <a href="/dashboard/admin/" class="btn btn-info">Admin</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                 </div>
+
+                <div class="row">
+                    <div class="col-md-2 text-center">
+                        <img class="img-responsive" src="/app/static/app/assets/undraw_welcome_3gvl.svg" />
+                    </div>
+                    <div class="col-md-10">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">Today I choose life. Every morning when I wake up I can choose joy, happiness, negativity, pain... To feel the freedom that comes from being able to continue to make mistakes and choices - today I choose to feel life, not to deny my humanity but embrace it.</p>
+                            <footer class="blockquote-footer">Kevyn Aucoin</footer>
+                        </blockquote>
+                    </div>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissable text-center fade in" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error{% else %}{{ message.tags|title }}{% endif %}!</strong> {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Upcoming</h5>
+                        {% if array == 'true' %}
+                        <h5 class="card-title">Your next shift:</h5>
+                        <p class="card-text">Date: {{ shift_date }}</p>
+                        <p class="card-text">Start time: {{ shift_start }}</p>
+                        <p class="card-text">End time: {{ shift_end }}</p>
+                        <br />
+                        <a href="/submit/swapshift/{{ shift_id }}/" class="btn btn-primary">Swap shift</a>
+                        {% elif array == 'False' %}
+                        <h5 class="card-title">No upcoming shift</h5>
+                        <p>Contact your manager if you believe this is incorrect</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="card">
+                      <div class="card-body">
+                        <h5 class="card-title">Shift Preferences</h5>
+                        <p class="card-text">Click here to alter your shift preferences</p>
+                        <a href="/dashboard/settings" class="btn btn-primary">Settings</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br />
+                
+            </main>
+        </div>
+        
+    </div>
+
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+    <script src="{% static 'app/scripts/respond.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
